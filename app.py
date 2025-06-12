@@ -15,13 +15,13 @@ def calculate_weight(length_cm):
             + 5.8716)
 
 st.set_page_config(
-    page_title="Shrimp Analyzer",
+    page_title="Shrimp sampling AI",
     page_icon="🦐",
     layout="wide"
 )
 
 def main():
-    st.title("GROBEST Shrimp Measurement Web App")
+    st.title("Shrimp Sampling Web App")
     st.markdown("""
     Upload an image containing shrimp and reference circle (2cm diameter) for automated:
     - Length measurement (cm)
