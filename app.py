@@ -8,13 +8,13 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="Shrimp Analyzer",
+    page_title="Shrimp Sampling Model",
     page_icon="🦐",
     layout="wide"
 )
 
 def main():
-    st.title("GROBEST Shrimp Measurement Web App")
+    st.title("Shrimp Measurement Web App")
     st.markdown("""
     Upload an image containing shrimp and reference circle (2cm diameter) for automated:
     - Length measurement (cm)
@@ -30,12 +30,10 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     
     if uploaded_file is not None:
-        # Read file content ONCE and reuse
-        file_bytes = uploaded_file.read()
-        
-        # Temporary file handling
-        with tempfile.NamedTemporaryFile(delete=False) as tfile:
-            tfile.write(file_bytes)  # Use already read bytes
+        # Preserve original file extension
+        file_ext = os.path.splitext(uploaded_file.name)[1]
+        with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tfile:
+            tfile.write(uploaded_file.read())
             img_path = tfile.name
 
         # Load image from bytes
