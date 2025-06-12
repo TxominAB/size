@@ -52,7 +52,7 @@ def main():
             model = YOLO('yolov8n-seg-custom.pt')
             
             with st.spinner('Analyzing shrimp...'):
-                lengths = []  # Proper initialization
+                lengths = []
                 results = model(img_path)
                 
                 # Reference detection
@@ -101,26 +101,25 @@ def main():
                     weights = [calculate_weight(l) for l in lengths]
                     avg_weight = np.mean(weights)
                     
+                    # Show only annotated image and histogram
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.image(cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB), 
-                               caption="Original Image", use_container_width=True)
-                    with col2:
                         st.image(cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB), 
                                caption="Analyzed Image", use_container_width=True)
+                    with col2:
+                        fig, ax = plt.subplots(figsize=(8,4))
+                        ax.hist(lengths, bins=np.arange(0, max(lengths)+1, 0.5), 
+                               color='teal', edgecolor='black')
+                        ax.set_xlabel('Length (cm)')
+                        ax.set_ylabel('Count')
+                        ax.set_title('Size Distribution')
+                        st.pyplot(fig)
                     
                     st.subheader("Analysis Results")
                     metric_col1, metric_col2, metric_col3 = st.columns(3)
                     metric_col1.metric("Average Length", f"{avg_length:.2f} cm")
                     metric_col2.metric("Weight Estimate", f"{avg_weight:.2f} g")
                     metric_col3.metric("Size Variation", f"{cv:.2f}%")
-                    
-                    fig, ax = plt.subplots(figsize=(8,4))
-                    ax.hist(lengths, bins=np.arange(0, max(lengths)+1, 0.5), 
-                           color='teal', edgecolor='black')
-                    ax.set_xlabel('Length (cm)')
-                    ax.set_ylabel('Count')
-                    st.pyplot(fig)
                 else:
                     st.warning("No shrimp detected in the image")
 
