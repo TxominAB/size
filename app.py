@@ -8,13 +8,13 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="Shrimp Sampler",
+    page_title="Shrimp Analyzer",
     page_icon="🦐",
     layout="wide"
 )
 
 def main():
-    st.title("Shrimp Sampling Web App")
+    st.title("GROBEST Shrimp Measurement Web App")
     st.markdown("""
     Upload an image containing shrimp and reference circle (2cm diameter) for automated:
     - Length measurement (cm)
@@ -25,13 +25,6 @@ def main():
     # Initialize session state
     if 'processed' not in st.session_state:
         st.session_state.processed = False
-
-    def calculate_weight(length_cm):
-        return (0.002 * (length_cm**4) 
-                - 0.0578 * (length_cm**3) 
-                + 0.7526 * (length_cm**2) 
-                - 3.5356 * length_cm 
-                + 5.8716)
 
     # File uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -51,7 +44,7 @@ def main():
             return
 
         # Load model
-        model = YOLO('yolov8n-seg-custom.pt')  # Update path as needed
+        model = YOLO('models/yolov8n-seg-custom.pt')  # Update path as needed
         
         # Processing pipeline
         with st.spinner('Analyzing shrimp...'):
@@ -89,10 +82,10 @@ def main():
                         # Measurement logic
                         if long_side <= 2 * short_side:
                             diagonal = np.sqrt(width**2 + height**2)
-                            length_px = diagonal * 0.85
+                            length_px = diagonal * 0.9
                             color = (0, 0, 255)  # Red
                         else:
-                            length_px = long_side * 0.95
+                            length_px = long_side * 0.9
                             color = (0, 255, 0)  # Green
                         
                         length_cm = length_px * px_to_cm
@@ -108,7 +101,7 @@ def main():
             if lengths:
                 avg_length = np.mean(lengths)
                 cv = (np.std(lengths) / avg_length) * 100
-                weights = [calculate_weight(l) for l in lengths]
+                weights = [l * 1.5 for l in lengths]
                 avg_weight = np.mean(weights)
                 
                 # Convert images for display
