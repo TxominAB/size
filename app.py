@@ -79,9 +79,9 @@ def main():
                             long_side = max(width, height)
                             short_side = min(width, height)
                             
-                            if long_side <= 2 * short_side:
+                            if long_side <= 2.2 * short_side:
                                 diagonal = np.sqrt(width**2 + height**2)
-                                length_px = diagonal * 0.9
+                                length_px = diagonal * 0.85
                                 color = (0, 0, 255)
                             else:
                                 length_px = long_side * 0.9
