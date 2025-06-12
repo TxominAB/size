@@ -30,18 +30,20 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     
     if uploaded_file is not None:
-        # Preserve original file extension
+        # Read file content ONCE and store in variable
+        file_bytes = uploaded_file.read()  # <--- THIS IS CRUCIAL
+        
+        # Temporary file handling using the stored bytes
         file_ext = os.path.splitext(uploaded_file.name)[1]
         with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tfile:
-            tfile.write(uploaded_file.read())
+            tfile.write(file_bytes)  # Use pre-read bytes
             img_path = tfile.name
 
-        # Load image from bytes
-        original_img = cv2.imdecode(np.frombuffer(file_bytes, np.uint8), cv2.IMREAD_COLOR)
-        
-        if original_img is None:
-            st.error("Error loading image - please try another file")
-            return
+        # Load image from the stored bytes
+        original_img = cv2.imdecode(
+            np.frombuffer(file_bytes, np.uint8),  # Use existing variable
+            cv2.IMREAD_COLOR
+        )
 
         # Rest of the code remains the same...
         # Load model
