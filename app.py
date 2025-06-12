@@ -49,21 +49,33 @@ def main():
         # Load model
         model = YOLO('yolov8n-seg-custom.pt')
         
-        # Processing pipeline
+        # In the processing pipeline section:
         with st.spinner('Analyzing shrimp...'):
+            # Initialize lengths here
+            lengths = []  # <-- ADD THIS LINE
+            
             # Perform inference
             results = model(img_path)
             
-            # ... (remaining code unchanged up to metrics calculation)
+            # Reference circle detection
+            # ... (existing reference detection code)
+            
+            # Process detections
+            annotated_img = original_img.copy()
+
+            for result in results:
+                if result.masks is not None:
+                    for mask in result.masks.xy:
+                        # ... (existing measurement logic)
+                        lengths.append(length_cm)  # Now appending to initialized list
 
             # Calculate metrics
-            if lengths:
+            if lengths:  # Now properly scoped and defined
                 avg_length = np.mean(lengths)
                 cv = (np.std(lengths) / avg_length) * 100
-                weights = [calculate_weight(l) for l in lengths]  # Using polynomial formula
-                avg_weight = np.mean(weights)
-                
-                # ... (remaining visualization code unchanged)
+                # ... rest of metric calculations
+            else:
+                st.warning("No shrimp detected in the image")
 
         # Cleanup temp file
         os.unlink(img_path)
