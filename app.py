@@ -104,10 +104,10 @@ def main():
                     col1, col2 = st.columns(2)
                     with col1:
                         st.image(cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB), 
-                               caption="Original Image", use_column_width=True)
+                               caption="Original Image", use_container_width=True)
                     with col2:
                         st.image(cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB), 
-                               caption="Analyzed Image", use_column_width=True)
+                               caption="Analyzed Image", use_container_width=True)
                     
                     st.subheader("Analysis Results")
                     metric_col1, metric_col2, metric_col3 = st.columns(3)
