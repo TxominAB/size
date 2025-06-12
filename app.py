@@ -49,7 +49,7 @@ def main():
                 st.error("Error loading image - please try another file")
                 return
 
-            model = YOLO('models/yolov8n-seg-custom.pt')
+            model = YOLO('yolov8n-seg-custom.pt')
             
             with st.spinner('Analyzing shrimp...'):
                 lengths = []  # Proper initialization
