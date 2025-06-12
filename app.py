@@ -47,7 +47,7 @@ def main():
 
         # Rest of the code remains the same...
         # Load model
-        model = YOLO('models/yolov8n-seg-custom.pt')
+        model = YOLO('yolov8n-seg-custom.pt')
         
         # Processing pipeline
         with st.spinner('Analyzing shrimp...'):
